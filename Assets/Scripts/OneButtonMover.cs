@@ -7,7 +7,7 @@ public class OneButtonMover : MonoBehaviour
     public float MoveSpeed = 1f;
     public Vector2 LookSensitivity = new Vector2(1f, 1f);
     public float Skew = 2.71828f;
-    public float Boost = 30f;
+    public float Boost = 2f;
 
     public Transform CameraTransform;
     public Transform NeckTransform;
@@ -38,12 +38,16 @@ public class OneButtonMover : MonoBehaviour
         Debug.DrawRay(transform.position + Vector3.up * 1f, NeckTransform.forward * 2f, Color.green);
         Debug.DrawRay(transform.position + Vector3.up * 1f, BodyTransform.forward * 2f, Color.blue);
         GetInput();
-        UpdateCamLook();
         UpdateBodyHeading();
         if (_MoveInput)
         {
             transform.position += BodyTransform.forward * MoveSpeed * Time.deltaTime;
         }
+    }
+
+    public void LateUpdate()
+    {
+        UpdateCamLook();
     }
 
     private void GetInput()
@@ -72,7 +76,7 @@ public class OneButtonMover : MonoBehaviour
         angle = angle / 360f + 0.5f;
         float outAngle = Mathf.Log(angle / (1f - angle), Skew) * Boost;
 
-        //Debug.Log("Angle : " + debug1 + "  Output : " + outAngle);
+        Debug.Log("Angle : " + debug1 + "  Output : " + outAngle);
         _NewBodyRot *= Quaternion.Euler(0f, outAngle, 0f);
         BodyTransform.rotation = _NewBodyRot;
     }
